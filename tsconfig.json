@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+      "noImplicitAny": true,
+      "preserveConstEnums": true,
+      "target": "es5",
+      "module": "none",
+      "removeComments": false,
+      "lib": [
+          "es2016",
+          "dom",
+          "es5"
+      ]
+  }
+}
