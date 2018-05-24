@@ -11,19 +11,17 @@ var List = /** @class */ (function () {
         this.head = null;
     }
     List.prototype.add = function (base) {
-        if (this.search(base.name) == null) {
-            if (this.head != null) {
-                var beforeHead = this.head.previous;
-                base.next = this.head;
-                base.previous = beforeHead;
-                beforeHead.next = base;
-                this.head.previous = base;
-            }
-            else {
-                this.head = base;
-                this.head.next = this.head;
-                this.head.previous = this.head;
-            }
+        if (this.head != null) {
+            var beforeHead = this.head.previous;
+            base.next = this.head;
+            base.previous = beforeHead;
+            beforeHead.next = base;
+            this.head.previous = base;
+        }
+        else {
+            this.head = base;
+            this.head.next = this.head;
+            this.head.previous = this.head;
         }
     };
     List.prototype.search = function (name) {
@@ -33,20 +31,53 @@ var List = /** @class */ (function () {
             if (this.head.next != this.head) {
                 var tail = this.head.previous;
                 var head = this.head.next;
-                var lastTail = null;
-                var lastHead = null;
                 do {
-                    console.log('tail', tail);
-                    console.log('head', head);
                     if (tail.name == name)
                         return tail;
                     if (head.name == name)
                         return head;
-                    lastHead = head;
-                    lastTail = tail;
                     tail = tail.previous;
                     head = head.next;
-                } while (tail != head || lastTail != head && lastHead != tail);
+                } while (tail != head);
+                if (tail.name == name)
+                    return tail;
+            }
+        }
+        return null;
+    };
+    List.prototype.ereaseLast = function () {
+        if (this.head != null) {
+            if (this.head.next != this.head) {
+                var beforeHead = this.head.previous;
+                beforeHead.previous.next = this.head;
+                this.head.previous = beforeHead.previous;
+                beforeHead.previous = beforeHead.next = null;
+                return beforeHead;
+            }
+            else {
+                var temp = this.head;
+                this.head = null;
+                temp.previous = temp.next = null;
+                return temp;
+            }
+        }
+        return null;
+    };
+    List.prototype.ereaseFirst = function () {
+        if (this.head != null) {
+            if (this.head.next != this.head) {
+                this.head.previous.next = this.head.next;
+                this.head.next.previous = this.head.previous;
+                var head = this.head;
+                this.head = this.head.next;
+                head.previous = head.next = null;
+                return head;
+            }
+            else {
+                var temp = this.head;
+                this.head = null;
+                temp.previous = temp.next = null;
+                return temp;
             }
         }
         return null;
@@ -54,6 +85,5 @@ var List = /** @class */ (function () {
     return List;
 }());
 var list = new List();
-for (var i = 0; i < 11; i++)
-    list.add(new Base("" + Math.floor(Math.random() * 10)));
-console.log(list.head);
+for (var i = 0; i < 3; i++)
+    list.add(new Base("" + i));
