@@ -4,10 +4,133 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="bulma.css">
   <title>Document</title>
 </head>
 <body>
-  
+  <section class="hero is-info">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">Bases de ruta del camion</h1>
+      </div>
+    </div>
+  </section>
+  <main class="section" id="app">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-4">
+          <h1 class="title">Crear Base</h1>
+          <div class="field">
+            <label class="label">Nombre</label>
+            <div class="control">
+              <input type="text" class="input" v-model='base.name'>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Duracion</label>
+            <div class="control">
+              <input type="number" class="input" v-model='base.time'>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <button class="button is-success" @click='add'>Agregar</button>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="field is-grouped">
+            <div class="control">
+              <input type="time" class="input" v-model='route.start'>
+            </div>
+            <div class="control">
+              <input type="time" class="input" v-model='route.end'>
+            </div>
+            <div class="control">
+              <input type="text" class="input" v-model='route.base'>
+            </div>
+            <div class="control">
+              <button class="button is-success" @click='traceRoute'>Trasar Ruta</button>
+            </div>
+          </div>
+          <table class="table is-fullwidth is-hoverable">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Hora</th>
+                <th>Base</th>
+                <th>Tiempo</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-link" @click='search'>Buscar</button>
+        </div>
+        <div class="control">
+          <button class="button is-info" @click='toList'>Listar</button>
+        </div>
+        <div class="control">
+          <button class="button is-danger" @click='eraseLast'>Eliminar &Uacute;ltimo</button>
+        </div>
+        <div class="control">
+          <button class="button is-danger" @click='eraseFirst'>Eliminar Inicio</buttton>
+        </div>
+        <div class="control">
+          <button class="button is-danger" @click='erase'>Eliminar</button>
+        </div>
+        <div class="control">
+          <input type="text" class="input" placeholder="Base a eliminar" v-model='deletable'>
+        </div>
+      </div>
+      <pre>
+        {{ JSON.decycle(list) }}
+        {{ route }}
+      </pre>
+    </div>
+  </main>
 </body>
 </html>
-<script src="Bus.js"></script>
+<!-- Libraries-->
+<script src="Vue.js"></script>
+<script src="cycle.js"></script>
+
+<!-- Classes -->
+<script src="Base.js"></script>
+<script src="List.js"></script>
+<!-- main -->
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    list: new List(),
+    base: {
+      name: '',
+      time: 0
+    },
+    route: {
+      start: '',
+      end: '',
+      base: ''
+    },
+    deletable: ''
+  },
+  methods: {
+    add: function () { this.list.add(new Base(this.base.name,this.base.time)) },
+    search: function () { this.list.search() },
+    toList: function () {  },
+    eraseLast: function () { this.list.eraseLast() },
+    eraseFirst: function () { this.list.eraseFirst() },
+    erase: function () { this.list.erase(this.deletable) },
+    traceRoute: function () {
+      const startHour = this.route.start.split(':')
+      let start = new Date()
+      console.log(start)
+      console.log(start.setHours(startHour[0],startHour[1]))
+    }
+  }
+})
+</script>
